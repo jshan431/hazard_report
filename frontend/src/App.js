@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Header from './components/Header';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
+import RegisterScreen from './screens/RegisterScreen';
+
 function App() {
   return (
     <Router>
@@ -11,6 +13,7 @@ function App() {
       <main className="py-3">
         <Container>
           <Route path='/login' component={LoginScreen} />
+          <Route path='/register' component={RegisterScreen} />
           <Route path='/' component={HomeScreen} exact/>
         </Container>
       </main>
