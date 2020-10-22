@@ -1,10 +1,11 @@
 import React, {Fragment, useState, useEffect} from 'react'
 import { Row, Col, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
-import { createHazard, listHazards } from '../actions/hazardAction';
+import { createHazard, listHazards } from '../actions/hazardActions';
 import Hazard from '../components/Hazard';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import { HAZARD_CREATE_RESET } from '../constants/hazardConstants';
 
 const HomeScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -24,8 +25,16 @@ const HomeScreen = ({ history }) => {
   } = hazardCreate;
 
   useEffect(() => {
-    dispatch(listHazards());
-  }, [dispatch]);
+    
+    dispatch({ type: HAZARD_CREATE_RESET });
+
+    if(successCreate) {
+      history.push(`/hazard/${createdHazard._id}/edit`)
+    } else {
+      dispatch(listHazards());
+    }
+
+  }, [dispatch, userInfo, successCreate]);
 
   const createHazardHandler = () => {
     dispatch(createHazard());
