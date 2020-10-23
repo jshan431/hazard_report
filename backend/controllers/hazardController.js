@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Hazard from '../models/hazardModel.js';
+import getCoordsForAddress from '../utils/location.js';
 
 const getHazards = asyncHandler(async (req, res) => {
   const hazards = await Hazard.find({});
@@ -46,15 +47,18 @@ const updateHazard = asyncHandler(async (req, res) => {
   const hazard = await Hazard.findById(req.params.id)
 
   if (hazard) {
-    
+
     // Check to see if the user is allowed to update the hazard
     if(hazard.user.equals(req.user._id)){
+
+      const coordinates = await getCoordsForAddress(address);
+
       hazard.name = name;
       hazard.description = description;
       hazard.image = image;
       hazard.category = category;
       hazard.address = address
-  
+      hazard.location = coordinates
       const updatedHazard = await hazard.save()
       res.json(updatedHazard)
     } else {

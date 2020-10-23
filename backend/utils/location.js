@@ -1,6 +1,7 @@
-const axios = require('axios');
+import axios from 'axios';
+import asyncHandler from 'express-async-handler';
 
-async function getCoordsForAddress(address) {
+const getCoordsForAddress = asyncHandler(async (address) => {
   // return {
   //   lat: 40.7484474,
   //   lng: -73.9871516
@@ -23,6 +24,6 @@ async function getCoordsForAddress(address) {
   const coordinates = data.results[0].geometry.location;
 
   return coordinates;
-}
+});
 
-module.exports = getCoordsForAddress;
+export default getCoordsForAddress;
