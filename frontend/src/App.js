@@ -8,6 +8,8 @@ import RegisterScreen from './screens/RegisterScreen';
 import HazardEditScreen from './screens/HazardEditScreen';
 import HazardScreen from './screens/HazardScreen';
 import {useSelector} from 'react-redux';
+import ProfileScreen from './screens/ProfileScreen';
+
 function App() {
 
   const userLogin = useSelector((state) => state.userLogin);
@@ -24,6 +26,7 @@ function App() {
           <Route path='/register' component={RegisterScreen} />
           <Route path='/' component={HomeScreen} exact/>
           <Route path='/hazard/:id' component={HazardScreen} exact/>
+          <Route path='/profile' component={ProfileScreen} />
           <Redirect to="/" />
         </Switch>
       </Container>

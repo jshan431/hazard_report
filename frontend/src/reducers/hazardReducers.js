@@ -82,3 +82,4 @@ export const hazardUpdateReducer = (state = { hazard: {} }, action) => {
       return state
   }
 }
+

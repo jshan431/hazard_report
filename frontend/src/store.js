@@ -3,13 +3,15 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { hazardListReducer, hazardCreateReducer, hazardDetailsReducer, hazardUpdateReducer } from './reducers/hazardReducers';
 
-import { userLoginReducer, userRegisterReducer } from './reducers/userReducers';
+import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer } from './reducers/userReducers';
 
 const reducer = combineReducers({
   hazardList: hazardListReducer,
   hazardCreate: hazardCreateReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
+  userDetails: userDetailsReducer,
+  userUpdateProfile: userUpdateProfileReducer,
   hazardDetails: hazardDetailsReducer,
   hazardUpdate: hazardUpdateReducer
 });
