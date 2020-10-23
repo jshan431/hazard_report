@@ -7,7 +7,7 @@ import Message from '../components/Message';
 import Loader from '../components/Loader';
 import FormContainer from '../components/FormContainer';
 import { HAZARD_UPDATE_RESET } from '../constants/hazardConstants';
-import { listHazardDetails, updateHazard } from '../actions/hazardActions';
+import { listHazardDetails, updateHazard, deleteHazard } from '../actions/hazardActions';
 
 const HazardEditScreen = ({ match, history}) => {
   const hazardId = match.params.id;
@@ -98,6 +98,13 @@ const HazardEditScreen = ({ match, history}) => {
     )
   }
 
+  const deleteHandler = (id) => {
+    if (window.confirm('Are you sure')) {
+      dispatch(deleteHazard(id));
+      history.push('/');
+    }
+  }
+
   return (
     <Fragment>
       <Link to='/' className='btn btn-light my-3'>
@@ -163,7 +170,13 @@ const HazardEditScreen = ({ match, history}) => {
                 onChange={(e) => setDescription(e.target.value)}
               ></Form.Control>
             </Form.Group>
-
+            <Button
+              variant='danger'
+              className='mr-5'
+              onClick={() => deleteHandler(hazard._id)}
+            >
+              Cancel
+            </Button>
             <Button type='submit' variant='primary'>
               Update
             </Button>

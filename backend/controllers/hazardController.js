@@ -1,6 +1,8 @@
 import asyncHandler from 'express-async-handler';
 import Hazard from '../models/hazardModel.js';
+import User from '../models/userModel.js';
 import getCoordsForAddress from '../utils/location.js';
+import mongoose from 'mongoose';
 
 const getHazards = asyncHandler(async (req, res) => {
   const hazards = await Hazard.find({});
@@ -19,6 +21,9 @@ const getHazardById = asyncHandler(async (req, res) => {
 });
 
 const createHazard = asyncHandler(async (req, res) => {
+
+  const user = await User.findById(req.user._id);
+
   const hazard = new Hazard({
     name: 'Sample Hazard',
     user: req.user._id,
@@ -27,13 +32,19 @@ const createHazard = asyncHandler(async (req, res) => {
     description: 'Sample description'
   });
 
-  const createdHazard = await hazard.save();
+  const sess = await mongoose.startSession();
+  sess.startTransaction();
+  const createdHazard = await hazard.save({ session: sess });
+  user.hazards.push(createdHazard);
+  await user.save({session: sess});
+  await sess.commitTransaction();
+
   res.status(201).json(createdHazard);
 });
 
 // @desc    Update a hazard
 // @route   PUT /api/hazards/:id
-// @access  Private/Admin
+// @access  Private/Auth
 const updateHazard = asyncHandler(async (req, res) => {
 
   const {
@@ -70,11 +81,32 @@ const updateHazard = asyncHandler(async (req, res) => {
     res.status(404)
     throw new Error('Hazard not found')
   }
-})
+});
+
+// @desc    Delete a hazard
+// @route   DELETE /api/hazards/:id
+// @access  Private/Auth
+const deleteHazard = asyncHandler(async (req, res) => {
+  const hazard = await Hazard.findById(req.params.id).populate('user', 'name email hazards');
+
+  if (hazard) {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await hazard.remove({session: sess});
+    hazard.user.hazards.pull(hazard); // we are able to do this because of populate
+    await hazard.user.save({session: sess});
+    await sess.commitTransaction();
+    res.json({ message: 'Hazard removed' });    
+  } else {
+    res.status(404)
+    throw new Error('Hazard not found')
+  }
+});
 
 export {
   getHazards,
   createHazard,
   getHazardById,
-  updateHazard
+  updateHazard,
+  deleteHazard
 }

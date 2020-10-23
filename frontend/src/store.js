@@ -1,7 +1,7 @@
 import { createStore, combineReducers, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { hazardListReducer, hazardCreateReducer, hazardDetailsReducer, hazardUpdateReducer } from './reducers/hazardReducers';
+import { hazardListReducer, hazardCreateReducer, hazardDetailsReducer, hazardUpdateReducer, hazardDeleteReducer } from './reducers/hazardReducers';
 
 import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer } from './reducers/userReducers';
 
@@ -13,7 +13,8 @@ const reducer = combineReducers({
   userDetails: userDetailsReducer,
   userUpdateProfile: userUpdateProfileReducer,
   hazardDetails: hazardDetailsReducer,
-  hazardUpdate: hazardUpdateReducer
+  hazardUpdate: hazardUpdateReducer,
+  hazardDelete: hazardDeleteReducer
 });
 
 // Get the cartItems from local storage if it exist. We use JSON parse to turn the stored string value back to an object

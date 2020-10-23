@@ -113,7 +113,7 @@ const ProfileScreen = ({ location, history }) => {
         )}
       </Col>
       <Col md={9}>
-        <h2>My Orders</h2>
+        <h2>My Reported Hazards</h2>
         {/*loadingOrders ? (
           <Loader />
         ) : errorOrders ? (

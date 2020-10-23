@@ -13,6 +13,9 @@ import {
   HAZARD_UPDATE_REQUEST,
   HAZARD_UPDATE_SUCCESS,
   HAZARD_UPDATE_FAIL,
+  HAZARD_DELETE_REQUEST,
+  HAZARD_DELETE_SUCCESS,
+  HAZARD_DELETE_FAIL
 } from '../constants/hazardConstants';
 
 import { logout } from './userActions';
@@ -139,6 +142,42 @@ export const updateHazard = (hazard) => async (dispatch, getState) => {
     }
     dispatch({
       type: HAZARD_UPDATE_FAIL,
+      payload: message,
+    })
+  }
+}
+
+export const deleteHazard = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: HAZARD_DELETE_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    await axios.delete(`/api/hazards/${id}`, config)
+
+    dispatch({
+      type: HAZARD_DELETE_SUCCESS,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logout())
+    }
+    dispatch({
+      type: HAZARD_DELETE_FAIL,
       payload: message,
     })
   }

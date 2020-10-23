@@ -12,7 +12,10 @@ import {
   HAZARD_UPDATE_REQUEST,
   HAZARD_UPDATE_SUCCESS,
   HAZARD_UPDATE_FAIL,
-  HAZARD_UPDATE_RESET
+  HAZARD_UPDATE_RESET,
+  HAZARD_DELETE_REQUEST,
+  HAZARD_DELETE_SUCCESS,
+  HAZARD_DELETE_FAIL
 } from '../constants/hazardConstants';
 
 export const hazardCreateReducer = (state = {}, action) => {
@@ -83,3 +86,15 @@ export const hazardUpdateReducer = (state = { hazard: {} }, action) => {
   }
 }
 
+export const hazardDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case HAZARD_DELETE_REQUEST:
+      return { loading: true }
+    case HAZARD_DELETE_SUCCESS:
+      return { loading: false, success: true }
+    case HAZARD_DELETE_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}

@@ -23,7 +23,14 @@ const userSchema = mongoose.Schema({
   image: {
     type: String,
     default: 'https://i.imgur.com/fECNtqD.jpg'
-  }
+  },
+  hazards: [
+    { 
+      type: mongoose.Types.ObjectId, 
+      required: true, 
+      ref: 'Hazard' 
+    }
+  ]
 }, {
   timestamps: true
 });
