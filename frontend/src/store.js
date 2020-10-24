@@ -1,12 +1,13 @@
 import { createStore, combineReducers, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { hazardListReducer, hazardCreateReducer, hazardDetailsReducer, hazardUpdateReducer, hazardDeleteReducer } from './reducers/hazardReducers';
+import { hazardListReducer, hazardCreateReducer, hazardDetailsReducer, hazardUpdateReducer, hazardDeleteReducer, hazardListForUserReducer } from './reducers/hazardReducers';
 
 import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer } from './reducers/userReducers';
 
 const reducer = combineReducers({
   hazardList: hazardListReducer,
+  hazardListForUser: hazardListForUserReducer,
   hazardCreate: hazardCreateReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,

@@ -6,6 +6,9 @@ import {
   HAZARD_LIST_FAIL,
   HAZARD_LIST_SUCCESS,
   HAZARD_LIST_REQUEST,
+  HAZARD_LIST_FOR_USER_REQUEST,
+  HAZARD_LIST_FOR_USER_SUCCESS,
+  HAZARD_LIST_FOR_USER_FAIL,
   HAZARD_DETAILS_REQUEST,
   HAZARD_DETAILS_SUCCESS,
   HAZARD_DETAILS_FAIL,
@@ -43,6 +46,22 @@ export const hazardListReducer = (state = { hazards: [] }, action) => {
         hazards: action.payload.hazards
       }
     case HAZARD_LIST_FAIL:
+      return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const hazardListForUserReducer = (state = { hazards: [] }, action) => {
+  switch (action.type) {
+    case HAZARD_LIST_FOR_USER_REQUEST:
+      return { loading: true, hazards: [] }
+    case HAZARD_LIST_FOR_USER_SUCCESS:
+      return {
+        loading: false,
+        hazards: action.payload.hazards
+      }
+    case HAZARD_LIST_FOR_USER_FAIL:
       return { loading: false, error: action.payload }
     default:
       return state

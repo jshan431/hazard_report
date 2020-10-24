@@ -7,6 +7,9 @@ import {
   HAZARD_LIST_FAIL,
   HAZARD_LIST_SUCCESS,
   HAZARD_LIST_REQUEST,
+  HAZARD_LIST_FOR_USER_REQUEST,
+  HAZARD_LIST_FOR_USER_SUCCESS,
+  HAZARD_LIST_FOR_USER_FAIL,
   HAZARD_DETAILS_REQUEST,
   HAZARD_DETAILS_SUCCESS,
   HAZARD_DETAILS_FAIL,
@@ -38,6 +41,42 @@ export const listHazards = () => async (
   } catch (error) {
     dispatch({
       type: HAZARD_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    })
+  }
+}
+
+export const listHazardsForUser = () => async (
+  dispatch, getState
+) => {
+  try {
+    dispatch({ type: HAZARD_LIST_FOR_USER_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    // use & for additional query params 
+    const { data } = await axios.get(
+      `/api/hazards/user`, config
+    )
+
+    dispatch({
+      type: HAZARD_LIST_FOR_USER_SUCCESS,
+      payload: data,
+    })
+  } catch (error) {
+    dispatch({
+      type: HAZARD_LIST_FOR_USER_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message

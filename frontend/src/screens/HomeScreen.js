@@ -1,10 +1,12 @@
 import React, {Fragment, useState, useEffect} from 'react'
-import { Row, Col, Button } from 'react-bootstrap';
+import { Row, Col, Button, Container } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { createHazard, listHazards } from '../actions/hazardActions';
 import Hazard from '../components/Hazard';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Map2 from '../components/Map2';
+
 import { HAZARD_CREATE_RESET } from '../constants/hazardConstants';
 
 const HomeScreen = ({ history }) => {
@@ -41,7 +43,7 @@ const HomeScreen = ({ history }) => {
   }
   
   return (
-    <Fragment>
+    <Container>
       <Row className='align-items-center'>
         <Col>
           <h1>Environmental Hazards</h1>
@@ -62,6 +64,19 @@ const HomeScreen = ({ history }) => {
           }
         </Col>
       </Row>
+      <Row className="my-3">
+        <Col>
+          <div className="map-container">
+            {
+              loading ? (
+                <Loader /> 
+              ) : (
+                <Map2 zoom={11.5} hazards={hazards}/>
+              )
+            }
+          </div>
+        </Col>  
+      </Row>
       <h3>Latest Reported Hazards</h3>
       {
         loading ? (
@@ -73,14 +88,14 @@ const HomeScreen = ({ history }) => {
           <Row>
             {hazards.map((hazard) => (
               <Col key={hazard._id} sm={12} md={6} lg={4} xl={3}>
-                <Hazard hazard={hazard} />
+                <Hazard hazard={hazard} zoom={16}/>
               </Col>
             ))}
           </Row>
           </Fragment>
         )
       }
-    </Fragment>
+    </Container>
   )
 }
 

@@ -76,7 +76,7 @@ const HazardScreen = ({ history, match}) => {
             </Row>
             <CustomModal show={showModal} onHide={handleCloseModal} heading={hazard.address ? hazard.address : ''}>
               <div className="map-container">
-                <Map center={hazard.location} zoom={16} />
+                <Map center={hazard.location} zoom={16} hazard={hazard}/>
               </div>
             </CustomModal>
           </Fragment>

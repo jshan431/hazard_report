@@ -88,19 +88,30 @@ const updateHazard = asyncHandler(async (req, res) => {
 // @access  Private/Auth
 const deleteHazard = asyncHandler(async (req, res) => {
   const hazard = await Hazard.findById(req.params.id).populate('user', 'name email hazards');
+  // Check to see if the user is allowed to update the hazard
+  if(hazard.user.equals(req.user._id)){
 
-  if (hazard) {
-    const sess = await mongoose.startSession();
-    sess.startTransaction();
-    await hazard.remove({session: sess});
-    hazard.user.hazards.pull(hazard); // we are able to do this because of populate
-    await hazard.user.save({session: sess});
-    await sess.commitTransaction();
-    res.json({ message: 'Hazard removed' });    
+    if (hazard) {
+      const sess = await mongoose.startSession();
+      sess.startTransaction();
+      await hazard.remove({session: sess});
+      hazard.user.hazards.pull(hazard); // we are able to do this because of populate
+      await hazard.user.save({session: sess});
+      await sess.commitTransaction();
+      res.json({ message: 'Hazard removed' });    
+    } else {
+      res.status(404)
+      throw new Error('Hazard not found')
+    }
   } else {
     res.status(404)
-    throw new Error('Hazard not found')
+    throw new Error('Not authorized to delete this hazard')
   }
+});
+
+const getHazardsForUser = asyncHandler(async (req, res) => {
+  const hazards = await Hazard.find({user: req.user._id});
+  res.json({ hazards });
 });
 
 export {
@@ -108,5 +119,6 @@ export {
   createHazard,
   getHazardById,
   updateHazard,
-  deleteHazard
+  deleteHazard,
+  getHazardsForUser
 }

@@ -24,7 +24,9 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="m-auto">
-              <Nav.Link href="#home">Home</Nav.Link>
+              <LinkContainer to='/' exact>
+                <Nav.Link>Home</Nav.Link>
+              </LinkContainer>
               <Nav.Link href="#link">Link</Nav.Link>
               {
                 userInfo ? (

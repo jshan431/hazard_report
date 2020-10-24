@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { getUserDetails, updateUserProfile } from '../actions/userActions';
-//import { listMyOrders } from '../actions/orderActions';
+import { listHazardsForUser } from '../actions/hazardActions';
 
 const ProfileScreen = ({ location, history }) => {
   const [ name, setName ] = useState('');
@@ -25,10 +25,10 @@ const ProfileScreen = ({ location, history }) => {
   const userUpdateProfile = useSelector(state => state.userUpdateProfile);
   const { success } = userUpdateProfile;
 
-  //const orderListMy = useSelector((state) => state.orderListMy)
+  const hazardListForUser = useSelector((state) => state.hazardListForUser)
 
-  // Already have loading, so we rename
-  //const { loading: loadingOrders, error: errorOrders, orders } = orderListMy
+  //Already have loading, so we rename
+  const { loading: loadingHazards, error: errorHazards, hazards } = hazardListForUser
 
   useEffect(() => {
     // If user is not logged in, redirect to login screen
@@ -37,7 +37,7 @@ const ProfileScreen = ({ location, history }) => {
     } else {
       if(!user.name) {
         dispatch(getUserDetails('profile'));
-        //dispatch(listMyOrders());
+        dispatch(listHazardsForUser());
       } else {
         setName(user.name);
         setEmail(user.email);
@@ -114,44 +114,32 @@ const ProfileScreen = ({ location, history }) => {
       </Col>
       <Col md={9}>
         <h2>My Reported Hazards</h2>
-        {/*loadingOrders ? (
+        {loadingHazards ? (
           <Loader />
-        ) : errorOrders ? (
-          <Message variant='danger'>{errorOrders}</Message>
+        ) : errorHazards ? (
+          <Message variant='danger'>{errorHazards}</Message>
         ) : (
           <Table striped bordered hover responsive className='table-sm'>
             <thead>
               <tr>
-                <th>ID</th>
+                <th>TITLE</th>
                 <th>DATE</th>
-                <th>TOTAL</th>
-                <th>PAID</th>
-                <th>DELIVERED</th>
+                <th>ADDRESS</th>
+                <th>CATEGORY</th>
+                <th>DESCRIPTION</th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              {orders.map((order) => (
-                <tr key={order._id}>
-                  <td>{order._id}</td>
-                  <td>{order.createdAt.substring(0, 10)}</td>
-                  <td>{order.totalPrice}</td>
+              {hazards.map((hazard) => (
+                <tr key={hazard._id}>
+                  <td>{hazard.name.substring(0,25)}</td>
+                  <td>{hazard.createdAt.substring(0, 10)}</td>
+                  <td>{hazard.address ? hazard.address : ''}</td>
+                  <td>{hazard.category}</td>
+                  <td>{hazard.description.substring(0,25)}</td>
                   <td>
-                    {order.isPaid ? (
-                      order.paidAt.substring(0, 10)
-                    ) : (
-                      <i className='fas fa-times' style={{ color: 'red' }}></i>
-                    )}
-                  </td>
-                  <td>
-                    {order.isDelivered ? (
-                      order.deliveredAt.substring(0, 10)
-                    ) : (
-                      <i className='fas fa-times' style={{ color: 'red' }}></i>
-                    )}
-                  </td>
-                  <td>
-                    <LinkContainer to={`/order/${order._id}`}>
+                    <LinkContainer to={`/hazard/${hazard._id}`}>
                       <Button className='btn-sm' variant='light'>
                         Details
                       </Button>
@@ -161,7 +149,7 @@ const ProfileScreen = ({ location, history }) => {
               ))}
             </tbody>
           </Table>
-        )*/}
+        )}
       </Col>
     </Row>
   )
