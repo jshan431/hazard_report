@@ -1,3 +1,4 @@
+import path from 'path';
 import express from 'express';
 import colors from 'colors';
 import dotenv from 'dotenv';
@@ -7,6 +8,7 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 import userRoutes from './routes/userRoutes.js';
 import hazardRoutes from './routes/hazardRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
 
 dotenv.config();
 
@@ -24,6 +26,11 @@ app.use(express.json());
 
 app.use('/api/users', userRoutes);
 app.use('/api/hazards', hazardRoutes);
+app.use('/api/upload', uploadRoutes);
+
+// uploads folder must be made static folder so that it can be loaded in the browser
+const __dirname = path.resolve();         // point to the current path
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
 app.get('/', (req, res) => {
   res.send('API is running....');

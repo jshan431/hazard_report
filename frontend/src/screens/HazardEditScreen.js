@@ -16,7 +16,7 @@ const HazardEditScreen = ({ match, history}) => {
   const [image, setImage] = useState('');
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
-  //const [uploading, setUploading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [address, setAddress] = useState('');
 
   const dispatch = useDispatch();
@@ -60,29 +60,29 @@ const HazardEditScreen = ({ match, history}) => {
     }
   }, [dispatch, history, hazardId, hazard, successUpdate, userInfo])
 
-  // const uploadFileHandler = async (e) => {
-  //   const file = e.target.files[0]          // only grab the first file in the array of target.files
-  //   const formData = new FormData()
-  //   formData.append('image', file)
-  //   setUploading(true)
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0]          // only grab the first file in the array of target.files
+    const formData = new FormData()
+    formData.append('image', file)
+    setUploading(true)
 
-  //   try {
-  //     const config = {
-  //       headers: {
-  //         'Content-Type': 'multipart/form-data',
-  //       },
-  //     }
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
 
-  //     // What we get back is a path
-  //     const { data } = await axios.post('/api/upload', formData, config)
+      // What we get back is a path
+      const { data } = await axios.post('/api/upload', formData, config)
 
-  //     setImage(data)        // set the path to the state
-  //     setUploading(false)
-  //   } catch (error) {
-  //     console.error(error)
-  //     setUploading(false)
-  //   }
-  // }
+      setImage(data)        // set the path to the state
+      setUploading(false)
+    } catch (error) {
+      console.error(error)
+      setUploading(false)
+    }
+  }
 
   const submitHandler = (e) => {
     e.preventDefault()
@@ -131,18 +131,25 @@ const HazardEditScreen = ({ match, history}) => {
             </Form.Group>
 
             <Form.Group controlId='image'>
-              <Form.Label>Image</Form.Label>
+              <Form.Label>Image (URL or upload a file)</Form.Label>
               <Form.Control
                 type='text'
                 placeholder='Enter image url'
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
-
+              <br />
+              <Form.File
+                id='image-file'
+                label='Choose File'
+                custom
+                onChange={uploadFileHandler}
+              ></Form.File>
+              {uploading && <Loader />}
             </Form.Group>
 
             <Form.Group controlId='address'>
-              <Form.Label>address</Form.Label>
+              <Form.Label>Address</Form.Label>
               <Form.Control
                 type='text'
                 placeholder='Enter Address'
