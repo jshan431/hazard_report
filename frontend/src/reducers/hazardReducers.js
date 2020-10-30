@@ -36,14 +36,16 @@ export const hazardCreateReducer = (state = {}, action) => {
   }
 }
 
-export const hazardListReducer = (state = { hazards: [] }, action) => {
+export const hazardListReducer = (state = { hazards: [], loading: false }, action) => {
   switch (action.type) {
     case HAZARD_LIST_REQUEST:
       return { loading: true, hazards: [] }
     case HAZARD_LIST_SUCCESS:
       return {
         loading: false,
-        hazards: action.payload.hazards
+        hazards: action.payload.hazards,
+        pages: action.payload.pages,
+        page: action.payload.page
       }
     case HAZARD_LIST_FAIL:
       return { loading: false, error: action.payload }

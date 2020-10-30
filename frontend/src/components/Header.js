@@ -1,8 +1,9 @@
 import React from 'react';
+import { Route } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../actions/userActions';
-
+import SearchBox from './SearchBox';
 import { Navbar, Container, Nav, NavDropdown, Form, FormControl, Button } from 'react-bootstrap'
 const Header = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,6 @@ const Header = () => {
               <LinkContainer to='/' exact>
                 <Nav.Link>Home</Nav.Link>
               </LinkContainer>
-              <Nav.Link href="#link">Link</Nav.Link>
               {
                 userInfo ? (
                   <NavDropdown title={userInfo.name} id='username'>
@@ -46,11 +46,16 @@ const Header = () => {
                   </LinkContainer>
                 )
               }
+              {userInfo && userInfo.isAdmin && (
+                <NavDropdown title='Admin' id='adminmenu'>
+                  <LinkContainer to='/admin/userlist'>
+                    <NavDropdown.Item>Users</NavDropdown.Item>
+                  </LinkContainer>
+                </NavDropdown>
+              )}
             </Nav>
-            <Form inline>
-              <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-              <Button variant="outline-success">Search</Button>
-            </Form>
+            {/* Render Prop technique, because the search box is embedded here, it does not have access to history prop as other components */}
+            <Route render={({ history }) => <SearchBox history={history} />} />
           </Navbar.Collapse>
         </Container>
       </Navbar>

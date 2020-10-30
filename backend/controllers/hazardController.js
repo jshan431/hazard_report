@@ -5,8 +5,24 @@ import getCoordsForAddress from '../utils/location.js';
 import mongoose from 'mongoose';
 
 const getHazards = asyncHandler(async (req, res) => {
-  const hazards = await Hazard.find({});
-  res.json({ hazards });
+
+  const pageSize = 8;
+
+  // query from request URL
+  const page = Number(req.query.pageNumber) || 1;
+
+  const keyword = req.query.keyword ?
+    {
+      name: {
+        $regex: req.query.keyword,
+        $options: 'i',        // case insensitive
+      }
+    } :
+    {};
+
+  const count = await Hazard.countDocuments({ ...keyword })
+  const hazards = await Hazard.find({ ...keyword}).limit(pageSize).skip(pageSize * (page -1));
+  res.json({ hazards, page, pages: Math.ceil(count / pageSize) });
 });
 
 const getHazardById = asyncHandler(async (req, res) => {

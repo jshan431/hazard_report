@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
 import { getUserDetails, updateUserProfile } from '../actions/userActions';
-import { listHazardsForUser } from '../actions/hazardActions';
+import { listHazardsForUser, deleteHazard } from '../actions/hazardActions';
 
 const ProfileScreen = ({ location, history }) => {
   const [ name, setName ] = useState('');
@@ -30,6 +30,13 @@ const ProfileScreen = ({ location, history }) => {
   //Already have loading, so we rename
   const { loading: loadingHazards, error: errorHazards, hazards } = hazardListForUser
 
+  const hazardDelete = useSelector((state) => state.hazardDelete)
+  const {
+    loading: loadingDelete,
+    error: errorDelete,
+    success: successDelete,
+  } = hazardDelete
+
   useEffect(() => {
     // If user is not logged in, redirect to login screen
     if(!userInfo) {
@@ -39,11 +46,15 @@ const ProfileScreen = ({ location, history }) => {
         dispatch(getUserDetails('profile'));
         dispatch(listHazardsForUser());
       } else {
-        setName(user.name);
-        setEmail(user.email);
+        if(user.name) {
+          dispatch(listHazardsForUser());
+        } else {
+          setName(user.name);
+          setEmail(user.email);
+        }
       }
     }
-  }, [dispatch, history, userInfo, user]);
+  }, [dispatch, history, userInfo, user, successDelete]);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -51,6 +62,12 @@ const ProfileScreen = ({ location, history }) => {
       setMessage('Passwords do not match');
     } else {
       dispatch(updateUserProfile({ id: user._id, name, email, password}));
+    }
+  }
+
+  const deleteHandler = (id) => {
+    if (window.confirm('Are you sure?')) {
+      dispatch(deleteHazard(id));
     }
   }
 
@@ -127,7 +144,8 @@ const ProfileScreen = ({ location, history }) => {
                 <th>ADDRESS</th>
                 <th>CATEGORY</th>
                 <th>DESCRIPTION</th>
-                <th></th>
+                <th>LINK</th>
+                <th>DELETE</th>
               </tr>
             </thead>
             <tbody>
@@ -144,6 +162,11 @@ const ProfileScreen = ({ location, history }) => {
                         Details
                       </Button>
                     </LinkContainer>
+                  </td>
+                  <td>
+                    <Button className='btn-sm' variant='danger' onClick={() => deleteHandler(hazard._id)}>
+                      Delete
+                    </Button>
                   </td>
                 </tr>
               ))}

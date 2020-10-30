@@ -23,7 +23,7 @@ import {
 
 import { logout } from './userActions';
 
-export const listHazards = () => async (
+export const listHazards = (keyword = '', pageNumber = '') => async (
   dispatch
 ) => {
   try {
@@ -31,7 +31,7 @@ export const listHazards = () => async (
 
     // use & for additional query params 
     const { data } = await axios.get(
-      `/api/hazards`
+      `/api/hazards?keyword=${keyword}&pageNumber=${pageNumber}`
     )
 
     dispatch({

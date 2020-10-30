@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { hazardListReducer, hazardCreateReducer, hazardDetailsReducer, hazardUpdateReducer, hazardDeleteReducer, hazardListForUserReducer } from './reducers/hazardReducers';
 
-import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer } from './reducers/userReducers';
+import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer, userListReducer, userDeleteReducer, userUpdateReducer } from './reducers/userReducers';
 
 const reducer = combineReducers({
   hazardList: hazardListReducer,
@@ -12,13 +12,14 @@ const reducer = combineReducers({
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,
+  userList: userListReducer,
+  userDelete: userDeleteReducer,
   userUpdateProfile: userUpdateProfileReducer,
   hazardDetails: hazardDetailsReducer,
   hazardUpdate: hazardUpdateReducer,
-  hazardDelete: hazardDeleteReducer
+  hazardDelete: hazardDeleteReducer,
+  userUpdate: userUpdateReducer
 });
-
-// Get the cartItems from local storage if it exist. We use JSON parse to turn the stored string value back to an object
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null
 

@@ -5,18 +5,24 @@ import { createHazard, listHazards } from '../actions/hazardActions';
 import Hazard from '../components/Hazard';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Paginate from '../components/Paginate';
 import Map2 from '../components/Map2';
 
 import { HAZARD_CREATE_RESET } from '../constants/hazardConstants';
 
-const HomeScreen = ({ history }) => {
+const HomeScreen = ({ history, match }) => {
+
+  const keyword = match.params.keyword;
+
+  const pageNumber = match.params.pageNumber || 1;
+
   const dispatch = useDispatch();
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   const hazardList = useSelector((state) => state.hazardList)
-  const { loading, error, hazards} = hazardList
+  const { loading, error, hazards, pages, page} = hazardList
 
   const hazardCreate = useSelector((state) => state.hazardCreate);
   const {
@@ -33,10 +39,10 @@ const HomeScreen = ({ history }) => {
     if(successCreate) {
       history.push(`/hazard/${createdHazard._id}/edit`)
     } else {
-      dispatch(listHazards());
+      dispatch(listHazards(keyword, pageNumber));
     }
 
-  }, [dispatch, userInfo, successCreate]);
+  }, [dispatch, userInfo, successCreate, keyword, pageNumber]);
 
   const createHazardHandler = () => {
     dispatch(createHazard());
@@ -92,6 +98,11 @@ const HomeScreen = ({ history }) => {
               </Col>
             ))}
           </Row>
+          <Paginate 
+            pages={pages}
+            page={page}
+            keyword={keyword ? keyword : ''} 
+          />
           </Fragment>
         )
       }

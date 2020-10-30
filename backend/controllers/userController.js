@@ -1,6 +1,8 @@
 import asyncHandler from 'express-async-handler';         // async handler perform the try catch inside of async functions for us
 import User from '../models/userModel.js';
 import generateToken from '../utils/generateToken.js';
+import Hazard from '../models/hazardModel.js';
+import mongoose from 'mongoose';
 
 const authUser = asyncHandler(async (req, res) => {
   const {email, password} = req.body;
@@ -91,9 +93,86 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Get all users
+// @route   GET /api/users
+// @access  Private/Admin
+const getUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({})
+  res.json(users)
+})
+
+// @desc    Delete user
+// @route   DELETE /api/users/:id
+// @access  Private/Admin
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id)
+
+  // if (user) {
+  //   await user.remove()
+  //   res.json({ message: 'User removed' })
+  // } else {
+  //   res.status(404)
+  //   throw new Error('User not found')
+  // }
+  if (user) {
+    const sess = await mongoose.startSession();
+    sess.startTransaction();
+    await Hazard.deleteMany({user});
+    await user.remove();
+    await sess.commitTransaction();
+    res.json({ message: 'User removed' })
+  } else {
+    res.status(404)
+    throw new Error('User not found')
+  }
+});
+
+// @desc    Get user by ID
+// @route   GET /api/users/:id
+// @access  Private/Admin
+const getUserById = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id).select('-password')
+
+  if (user) {
+    res.json(user)
+  } else {
+    res.status(404)
+    throw new Error('User not found')
+  }
+})
+
+// @desc    Update user
+// @route   PUT /api/users/:id
+// @access  Private/Admin
+const updateUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id)
+
+  if (user) {
+    user.name = req.body.name || user.name
+    user.email = req.body.email || user.email
+    user.isAdmin = req.body.isAdmin
+
+    const updatedUser = await user.save()
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      isAdmin: updatedUser.isAdmin,
+    })
+  } else {
+    res.status(404)
+    throw new Error('User not found')
+  }
+})
+
 export {
   registerUser,
   authUser,
   getUserProfile,
-  updateUserProfile
+  updateUserProfile,
+  getUsers,
+  deleteUser,
+  getUserById,
+  updateUser
 }

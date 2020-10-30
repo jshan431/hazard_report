@@ -146,7 +146,7 @@ const HazardEditScreen = ({ match, history}) => {
               <Form.Control
                 type='text'
                 placeholder='Enter Address'
-                value={address}
+                defaultValue={address}
                 onChange={(e) => setAddress(e.target.value)}
               ></Form.Control>
             </Form.Group>
