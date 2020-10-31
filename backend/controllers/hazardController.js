@@ -21,12 +21,12 @@ const getHazards = asyncHandler(async (req, res) => {
     {};
 
   const count = await Hazard.countDocuments({ ...keyword })
-  const hazards = await Hazard.find({ ...keyword}).limit(pageSize).skip(pageSize * (page -1));
+  const hazards = await Hazard.find({ ...keyword}).populate('user', 'name').limit(pageSize).skip(pageSize * (page -1));
   res.json({ hazards, page, pages: Math.ceil(count / pageSize) });
 });
 
 const getHazardById = asyncHandler(async (req, res) => {
-  const hazard = await Hazard.findById(req.params.id);
+  const hazard = await Hazard.findById(req.params.id).populate('user', 'name image hazards');
 
   if(hazard){
     res.json(hazard);       // send in json format
@@ -44,7 +44,7 @@ const createHazard = asyncHandler(async (req, res) => {
     name: 'Sample Hazard',
     user: req.user._id,
     image: '/images/caution-tape.jpg',
-    category: 'Sameple category',
+    category: 'Sample category',
     description: 'Sample description'
   });
 
@@ -130,11 +130,55 @@ const getHazardsForUser = asyncHandler(async (req, res) => {
   res.json({ hazards });
 });
 
+// @desc    Create new review
+// @route   POST /api/hazards/:id/reviews
+// @access  Private
+const createHazardReview = asyncHandler(async (req, res) => {
+  const { rating, comment } = req.body
+
+  const hazard = await Hazard.findById(req.params.id)
+
+  // Check if user already made a review
+  if (hazard) {
+    const alreadyReviewed = hazard.reviews.find(
+      (r) => r.user.toString() === req.user._id.toString()
+    )
+
+    if (alreadyReviewed) {
+      res.status(400)
+      throw new Error('Hazard already commented')
+    }
+
+    const review = {
+      name: req.user.name,
+      rating: Number(rating),
+      comment,
+      user: req.user._id,
+    }
+
+    hazard.reviews.push(review)
+
+    hazard.numReviews = hazard.reviews.length
+
+    // Update the product's rating
+    hazard.rating =
+      hazard.reviews.reduce((acc, item) => item.rating + acc, 0) /
+      hazard.reviews.length
+
+    await hazard.save()
+    res.status(201).json({ message: 'Review added' })
+  } else {
+    res.status(404)
+    throw new Error('Hazard not found')
+  }
+})
+
 export {
   getHazards,
   createHazard,
   getHazardById,
   updateHazard,
   deleteHazard,
-  getHazardsForUser
+  getHazardsForUser,
+  createHazardReview
 }

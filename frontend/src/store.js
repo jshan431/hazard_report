@@ -1,7 +1,7 @@
 import { createStore, combineReducers, applyMiddleware} from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { hazardListReducer, hazardCreateReducer, hazardDetailsReducer, hazardUpdateReducer, hazardDeleteReducer, hazardListForUserReducer } from './reducers/hazardReducers';
+import { hazardListReducer, hazardCreateReducer, hazardDetailsReducer, hazardUpdateReducer, hazardDeleteReducer, hazardListForUserReducer, hazardReviewCreateReducer} from './reducers/hazardReducers';
 
 import { userLoginReducer, userRegisterReducer, userDetailsReducer, userUpdateProfileReducer, userListReducer, userDeleteReducer, userUpdateReducer } from './reducers/userReducers';
 
@@ -18,7 +18,8 @@ const reducer = combineReducers({
   hazardDetails: hazardDetailsReducer,
   hazardUpdate: hazardUpdateReducer,
   hazardDelete: hazardDeleteReducer,
-  userUpdate: userUpdateReducer
+  userUpdate: userUpdateReducer,
+  hazardReviewCreate: hazardReviewCreateReducer,
 });
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ? JSON.parse(localStorage.getItem('userInfo')) : null

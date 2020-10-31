@@ -18,7 +18,11 @@ import {
   HAZARD_UPDATE_FAIL,
   HAZARD_DELETE_REQUEST,
   HAZARD_DELETE_SUCCESS,
-  HAZARD_DELETE_FAIL
+  HAZARD_DELETE_FAIL,
+  HAZARD_CREATE_REVIEW_REQUEST,
+  HAZARD_CREATE_REVIEW_SUCCESS,
+  HAZARD_CREATE_REVIEW_FAIL,
+  HAZARD_CREATE_REVIEW_RESET
 } from '../constants/hazardConstants';
 
 import { logout } from './userActions';
@@ -217,6 +221,46 @@ export const deleteHazard = (id) => async (dispatch, getState) => {
     }
     dispatch({
       type: HAZARD_DELETE_FAIL,
+      payload: message,
+    })
+  }
+}
+
+export const createHazardReview = (hazardId, review) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    dispatch({
+      type: HAZARD_CREATE_REVIEW_REQUEST,
+    })
+
+    const {
+      userLogin: { userInfo },
+    } = getState()
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    }
+
+    await axios.post(`/api/hazards/${hazardId}/reviews`, review, config)
+
+    dispatch({
+      type: HAZARD_CREATE_REVIEW_SUCCESS,
+    })
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message
+    if (message === 'Not authorized, token failed') {
+      dispatch(logout())
+    }
+    dispatch({
+      type: HAZARD_CREATE_REVIEW_FAIL,
       payload: message,
     })
   }

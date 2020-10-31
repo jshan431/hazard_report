@@ -2,24 +2,21 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card } from 'react-bootstrap';
 
-const Hazard = ({hazard}) => {
+const TinyHazard = ({hazard}) => {
   return (
-    <Card className="my-3 p-3 rounded">
+    <Card style={{width: '7rem'}} className="my-3 rounded">
       <Link to={`/hazard/${hazard._id}`}>
         <Card.Img src={hazard.image} variant="top" />
       </Link>
       <Card.Body>
         <Link to={`/hazard/${hazard._id}`}>
           <Card.Title as="div">
-            <strong>{hazard.name}</strong>
+            <small>{hazard.name}</small>
           </Card.Title>
         </Link>
-        <Card.Text>
-          By: {hazard.user.name}
-        </Card.Text>
       </Card.Body>
     </Card>
   )
 }
 
-export default Hazard
+export default TinyHazard;

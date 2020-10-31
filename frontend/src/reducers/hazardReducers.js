@@ -18,7 +18,11 @@ import {
   HAZARD_UPDATE_RESET,
   HAZARD_DELETE_REQUEST,
   HAZARD_DELETE_SUCCESS,
-  HAZARD_DELETE_FAIL
+  HAZARD_DELETE_FAIL,
+  HAZARD_CREATE_REVIEW_REQUEST,
+  HAZARD_CREATE_REVIEW_SUCCESS,
+  HAZARD_CREATE_REVIEW_FAIL,
+  HAZARD_CREATE_REVIEW_RESET
 } from '../constants/hazardConstants';
 
 export const hazardCreateReducer = (state = {}, action) => {
@@ -70,7 +74,7 @@ export const hazardListForUserReducer = (state = { hazards: [] }, action) => {
   }
 }
 
-export const hazardDetailsReducer = (state = { hazard: { reviews: []}}, action) => {
+export const hazardDetailsReducer = (state = { hazard: { reviews: [], user: {hazards: []}}}, action) => {
   switch(action.type) {
     case HAZARD_DETAILS_REQUEST:
       return { 
@@ -80,7 +84,7 @@ export const hazardDetailsReducer = (state = { hazard: { reviews: []}}, action) 
     case HAZARD_DETAILS_SUCCESS:
       return { 
         loading: false, 
-        hazard: action.payload 
+        hazard: action.payload
       };
     case HAZARD_DETAILS_FAIL:
       return { 
@@ -115,6 +119,21 @@ export const hazardDeleteReducer = (state = {}, action) => {
       return { loading: false, success: true }
     case HAZARD_DELETE_FAIL:
       return { loading: false, error: action.payload }
+    default:
+      return state
+  }
+}
+
+export const hazardReviewCreateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case HAZARD_CREATE_REVIEW_REQUEST:
+      return { loading: true }
+    case HAZARD_CREATE_REVIEW_SUCCESS:
+      return { loading: false, success: true }
+    case HAZARD_CREATE_REVIEW_FAIL:
+      return { loading: false, error: action.payload }
+    case HAZARD_CREATE_REVIEW_RESET:
+      return {}
     default:
       return state
   }

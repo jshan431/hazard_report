@@ -46,16 +46,16 @@ const HazardEditScreen = ({ match, history}) => {
         dispatch(listHazardDetails(hazardId))
       } else {
         // Check to see if the user is authorized to update on the frontend
-        if(hazard.user !== userInfo._id){
-          history.push('/');
-        } else {
+        // if(hazard.user !== userInfo._id){
+        //   history.push('/');
+        // } else {
           // set the product details in the component's state
           setName(hazard.name)
           setImage(hazard.image)
           setCategory(hazard.category)
           setAddress(hazard.address)
           setDescription(hazard.description)
-        }
+        //}
       }
     }
   }, [dispatch, history, hazardId, hazard, successUpdate, userInfo])
@@ -149,7 +149,7 @@ const HazardEditScreen = ({ match, history}) => {
             </Form.Group>
 
             <Form.Group controlId='address'>
-              <Form.Label>Address</Form.Label>
+              <Form.Label>address</Form.Label>
               <Form.Control
                 type='text'
                 placeholder='Enter Address'
@@ -195,3 +195,6 @@ const HazardEditScreen = ({ match, history}) => {
 }
 
 export default HazardEditScreen
+
+
+
