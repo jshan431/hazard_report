@@ -15,7 +15,7 @@ const Hazard = ({hazard}) => {
           </Card.Title>
         </Link>
         <Card.Text>
-          By: {hazard.user.name}
+          Reported By {hazard.user.name} on {hazard.createdAt.substring(0,10)}
         </Card.Text>
       </Card.Body>
     </Card>

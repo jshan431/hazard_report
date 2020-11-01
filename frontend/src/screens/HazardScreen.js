@@ -52,7 +52,10 @@ const HazardScreen = ({ history, match}) => {
     }
 
     dispatch(listHazardDetails(match.params.id));
-    dispatch(listHazardsForUser(hazard.user));
+
+    if(hazard){
+      dispatch(listHazardsForUser(hazard.user));
+    }
 
   }, [dispatch, match, successHazardReview])
 
@@ -64,6 +67,11 @@ const HazardScreen = ({ history, match}) => {
         comment,
       })
     )
+  }
+
+  const editHazardHandler = (e) => {
+    e.preventDefault();
+    history.push(`/hazard/${hazard._id}/edit`);
   }
 
   return (
@@ -90,6 +98,7 @@ const HazardScreen = ({ history, match}) => {
                   </ListGroup.Item>
                   <ListGroup.Item>Category: {hazard.category}</ListGroup.Item>
                   <ListGroup.Item>Reported By: {hazard.user.name}</ListGroup.Item>
+                  <ListGroup.Item>Reported On: {hazard.createdAt && hazard.createdAt.substring(0,10)}</ListGroup.Item>
                   <ListGroup.Item>
                     Description: {hazard.description}
                   </ListGroup.Item>
@@ -101,7 +110,15 @@ const HazardScreen = ({ history, match}) => {
                       Show on map
                     </Button>
                   </ListGroup.Item>
-
+                  {
+                    hazard.user._id === userInfo._id && (
+                      <ListGroup.Item>
+                        <Button variant="warning" onClick={editHazardHandler}>
+                          Edit Hazard
+                        </Button>
+                      </ListGroup.Item>
+                    )
+                  }
                 </ListGroup>
               </Col>
             </Row>
@@ -168,7 +185,7 @@ const HazardScreen = ({ history, match}) => {
               </Col>
             </Row>
             <Row>
-              {hazards ? hazards.filter((thisHazard) => thisHazard._id !== hazard._id).map((hazard) => <Col><TinyHazard key={hazard._id} hazard={hazard}/></Col>) : <Loader />}
+              {hazards ? hazards.filter((thisHazard) => thisHazard._id !== hazard._id).map((hazard) => <Col key={hazard._id}><TinyHazard key={hazard._id} hazard={hazard}/></Col>) : <Loader />}
             </Row> 
             <CustomModal show={showModal} onHide={handleCloseModal} heading={hazard.address ? hazard.address : ''}>
               <div className="map-container">
