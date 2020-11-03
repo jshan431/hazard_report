@@ -76,6 +76,8 @@ const HomeScreen = ({ history, match }) => {
             {
               loading ? (
                 <Loader /> 
+              ) : error ? (
+                <Message variant='danger'>{error}</Message>
               ) : (
                 <Map2 zoom={11.5} hazards={hazards}/>
               )

@@ -12,6 +12,7 @@ import {useSelector} from 'react-redux';
 import ProfileScreen from './screens/ProfileScreen';
 import UserEditScreen from './screens/UserEditScreen';
 import UserListScreen from './screens/UserListScreen';
+import ScrollToTop from './ScrollToTop';
 
 function App() {
 
@@ -64,12 +65,12 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <Header />
-      <main className="py-3">
-        {routes}
-      </main>
-      <Footer />
-      
+        <main className="py-3">
+          {routes}
+        </main>
+        <Footer />
     </Router>
   );
 }
