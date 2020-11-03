@@ -32,9 +32,17 @@ app.use('/api/upload', uploadRoutes);
 const __dirname = path.resolve();         // point to the current path
 app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
 
-app.get('/', (req, res) => {
-  res.send('API is running....');
-})
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '/frontend/build')))
+
+  app.get('*', (req, res) =>
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'))
+  )
+} else {
+  app.get('/', (req, res) => {
+    res.send('API is running....')
+  })
+}
 
 // Page Not found Error Handling
 app.use(notFound);
