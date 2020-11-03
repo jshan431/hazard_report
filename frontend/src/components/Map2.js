@@ -23,7 +23,7 @@ const Map2 = props => {
 
     if(hazards){
       for(let x = 0; x < hazards.length; x++){
-      let contentString = `<div><h5>${hazards[x].name}</h5><p>${hazards[x].category}</p><a href="http://localhost:3000/hazard/${hazards[x]._id}">More Info</a></div>`;
+      let contentString = `<div><h5>${hazards[x].name}</h5><p>${hazards[x].category}</p><a href="${process.env.REACT_APP_BACKEND_URL}/hazard/${hazards[x]._id}">More Info</a></div>`;
         let infowindow = new window.google.maps.InfoWindow({
           content: contentString
         });
