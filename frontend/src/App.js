@@ -8,6 +8,7 @@ import HomeScreen from './screens/HomeScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import HazardEditScreen from './screens/HazardEditScreen';
 import HazardScreen from './screens/HazardScreen';
+import HazardScreen2 from './screens/HazardScreen2';
 import {useSelector} from 'react-redux';
 import ProfileScreen from './screens/ProfileScreen';
 import UserEditScreen from './screens/UserEditScreen';
@@ -50,7 +51,7 @@ function App() {
         <Route path='/login' component={LoginScreen} />
         <Route path='/register' component={RegisterScreen} />
         <Route path='/' component={HomeScreen} exact/>
-        <Route path='/hazard/:id' component={HazardScreen} exact/>
+        <Route path='/hazard/:id' component={HazardScreen2} exact/>
         <Route path="/search/:keyword" component={HomeScreen} exact/>
           <Route path='/page/:pageNumber' component={HomeScreen} exact />
           <Route

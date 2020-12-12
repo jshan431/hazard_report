@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useEffect} from 'react'
+import React, {Fragment, useEffect} from 'react'
 import { Row, Col, Button, Container } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { createHazard, listHazards } from '../actions/hazardActions';
@@ -26,8 +26,8 @@ const HomeScreen = ({ history, match }) => {
 
   const hazardCreate = useSelector((state) => state.hazardCreate);
   const {
-    loading: loadingCreate,
-    error: errorCreate,
+    //loading: loadingCreate,
+    //error: errorCreate,
     success: successCreate,
     hazard: createdHazard,
   } = hazardCreate;
@@ -42,7 +42,7 @@ const HomeScreen = ({ history, match }) => {
       dispatch(listHazards(keyword, pageNumber));
     }
 
-  }, [dispatch, userInfo, successCreate, keyword, pageNumber]);
+  }, [dispatch, userInfo, successCreate, keyword, pageNumber, history, createHazard._id]);    // added last two dependencies
 
   const createHazardHandler = () => {
     dispatch(createHazard());

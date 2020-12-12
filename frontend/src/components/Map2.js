@@ -1,16 +1,15 @@
 import React, { useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 const Map2 = props => {
   const mapRef = useRef();
   
-  const { center, zoom, hazards } = props;
+  //const { center, zoom, hazards } = props;
+  const { zoom, hazards } = props;
+
 
   const coordinates = {lat: 37.733795, lng: -122.446747};
-  const coordinates2 = {lat: 37.763230, lng: -122.483850}
+  //const coordinates2 = {lat: 37.763230, lng: -122.483850}
   //Re-render upon any changes to zoom and the center
   //Tell google map where to render using useRef()
-
-
 
   useEffect(() => {
 
@@ -34,7 +33,7 @@ const Map2 = props => {
       }
     }
 
-  }, [coordinates, zoom]);  
+  }, [coordinates, zoom, hazards]);  //added hazards
 
   return (
     <div

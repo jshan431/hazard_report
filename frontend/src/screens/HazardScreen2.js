@@ -112,6 +112,7 @@ const HazardScreen = ({ history, match}) => {
                   </ListGroup.Item>
                   {
                     
+                    /*
                     hazard.user._id === userInfo._id && (
                       <ListGroup.Item>
                         <Button variant="warning" onClick={editHazardHandler}>
@@ -119,7 +120,8 @@ const HazardScreen = ({ history, match}) => {
                         </Button>
                       </ListGroup.Item>
                     )
-                    
+                    */
+
                   }
                 </ListGroup>
               </Col>
@@ -181,7 +183,7 @@ const HazardScreen = ({ history, match}) => {
               </ListGroup>
               </Col>
             </Row>
-            {/*}
+            {/*
             <Row className="mt-3">
               <Col md={6}>
                 <h3>More reports by {hazard.user.name}</h3>
@@ -189,7 +191,7 @@ const HazardScreen = ({ history, match}) => {
             </Row>
             <Row>
               {hazards ? hazards.filter((thisHazard) => thisHazard._id !== hazard._id).map((hazard) => <Col key={hazard._id}><TinyHazard key={hazard._id} hazard={hazard}/></Col>) : <Loader />}
-            </Row> 
+            </Row>
             */}
             <CustomModal show={showModal} onHide={handleCloseModal} heading={hazard.address ? hazard.address : ''}>
               <div className="map-container">
@@ -204,14 +206,3 @@ const HazardScreen = ({ history, match}) => {
 }
 
 export default HazardScreen;
-
-//<Map center={hazard.coordinates} zoom={16}/>
-
-                 
-// { hazard.user.hazards && hazard.user.hazards.map((hazard) => (
-//   <Col key={hazard._id} sm={12} md={6} lg={4} xl={3}>
-//   <Hazard hazard={hazard}/>
-// </Col>
-// ))}
-
-//                   {hazards ? hazards.map((hazard) => <Hazard hazard={hazard}/>) : <Loader />}
